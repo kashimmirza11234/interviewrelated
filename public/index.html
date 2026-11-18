@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Secure Notes</title>
+  <style>
+    body { font: 14px/1.4 system-ui, sans-serif; max-width: 880px; margin: 1rem auto; padding: 0 1rem; }
+    section { border: 1px solid #ccc; padding: .75rem; margin: .75rem 0; }
+    h2 { margin: 0 0 .5rem; font-size: 1rem; }
+    input, textarea, button { font: inherit; margin: 2px 0; }
+    input, textarea { width: 100%; box-sizing: border-box; }
+    .row { display: flex; gap: .5rem; align-items: center; } .row > * { width: auto; }
+    .item { border-top: 1px solid #eee; padding: .4rem 0; } .muted { color: #666; font-size: 12px; }
+    #msg { padding: .4rem; display: none; } #msg.err { display: block; background: #fdd; } #msg.ok { display: block; background: #dfd; }
+    table { border-collapse: collapse; width: 100%; } td, th { border-top: 1px solid #eee; padding: 3px 6px; text-align: left; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <h1>Secure Notes</h1>
+  <div id="msg"></div>
+
+  <section id="auth">
+    <h2>Login / Register</h2>
+    <form id="loginForm">
+      <input name="email" type="email" placeholder="email" required autocomplete="username">
+      <input name="password" type="password" placeholder="password (min 8)" required autocomplete="current-password">
+      <input name="name" placeholder="name (register only)">
+      <input name="interests" placeholder="interests, comma separated (register only)">
+      <div class="row"><button type="submit">Login</button><button type="button" id="registerBtn">Register</button></div>
+    </form>
+  </section>
+
+  <div id="app" class="hidden">
+    <section><div class="row"><b id="me"></b><button id="logout">Logout</button></div></section>
+
+    <section>
+      <h2 id="notesTitle">My notes</h2>
+      <form id="noteForm"><input name="title" placeholder="title" required maxlength="200"><textarea name="content" placeholder="content" rows="2"></textarea><button>Add note</button></form>
+      <div id="notes"></div>
+      <div class="row"><button id="notesPrev">Prev</button><span id="notesPage" class="muted"></span><button id="notesNext">Next</button></div>
+    </section>
+
+    <section>
+      <h2>Posts (public)</h2>
+      <form id="postForm"><input name="title" placeholder="post title" required maxlength="200"><textarea name="body" placeholder="post body" rows="2"></textarea><button>Publish post</button></form>
+      <div class="row"><input id="postsUserId" placeholder="user id to view posts"><button id="loadPosts">Load posts</button></div>
+      <div id="posts"></div>
+      <div class="row"><button id="postsPrev">Prev</button><span id="postsPage" class="muted"></span><button id="postsNext">Next</button></div>
+    </section>
+
+    <div id="admin" class="hidden">
+      <section>
+        <h2>Admin: users</h2>
+        <form id="userForm" class="row"><input name="name" placeholder="name" required><input name="email" type="email" placeholder="email" required><input name="password" type="password" placeholder="password" required><select name="role"><option>user</option><option>admin</option></select><button>Add user</button></form>
+        <table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Interests</th><th>Id</th><th></th></tr></thead><tbody id="users"></tbody></table>
+        <div class="row"><button id="usersPrev">Prev</button><span id="usersPage" class="muted"></span><button id="usersNext">Next</button></div>
+      </section>
+      <section>
+        <h2>Admin: users grouped by interest</h2>
+        <div class="row"><input id="interestFilter" placeholder="filter by one interest (optional)"><button id="loadGroups">Load</button></div>
+        <div id="groups"></div>
+        <div class="row"><button id="groupsPrev">Prev</button><span id="groupsPage" class="muted"></span><button id="groupsNext">Next</button></div>
+      </section>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
